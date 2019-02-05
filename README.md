@@ -2,7 +2,7 @@
 
 ### Usage
 
-Run `chmod +x ./patcher`.
+Run `chmod +x ./patcherplus`.
 
 Run `./patcherplus`.
 
