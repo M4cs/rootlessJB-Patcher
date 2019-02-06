@@ -64,9 +64,9 @@ try:
     pattern = '*.dylib'
     for dir,_,_ in os.walk(CUR_DIR):
         files.extend(glob(os.path.join(dir, pattern)))
-    for i in range(len(files)):
-        print(f'running ldid2 on {files[i]}')
-        os.system(f'ldid2 -S {files[i]}')
+    for file in files:
+        print('running ldid2 on ', file)
+        os.system('ldid2 -S ' + file)
     os.remove(PATCHER_DIR)
     print('complete...')
 except Exception as e:
