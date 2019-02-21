@@ -63,7 +63,7 @@ try:
     os.system(query)
     files = []
     pattern = '*.dylib'
-    for dir,_,_ in os.walk(CUR_DIR):
+    for dir,_,_ in out_path:
         files.extend(glob(os.path.join(dir, pattern)))
     for i in range(len(files)):
         print(f'running ldid2 on {files[i]}')
