@@ -13,7 +13,7 @@ PATCHER_DIR = os.path.realpath(os.getcwd() + '/patcher.sh')
 CUR_DIR = os.path.realpath(os.getcwd())
 try:
     print('checking For ldid2...')
-    if os.path.exists(LDID_PATH) == True:
+    if os.path.exists(LDID_PATH):
         st = os.stat(LDID_PATH)
         oct_perm = oct(st.st_mode)
         if oct_perm[-3:] == 755:
@@ -24,7 +24,7 @@ try:
             os.chmod(LDID_PATH, 0o755)
             print('set permissions for ldid2...')
         print('ldid2 is installed and ready to be used...')
-    elif os.path.exists(LDID_PATH) == False:
+    else:
         print('ldid2 not found...')
         try:
             print('downloading ldid2')
@@ -43,15 +43,14 @@ try:
     print('checking for patcher dependencies...')
     dpkg_exists = os.path.exists(DPKG_PATH)
     brew_exists = os.path.exists(BREW_PATH)
-    if dpkg_exists == False:
-        if brew_exists == False:
-            print('brew is not installed...')
-            print('starting brew installer...')
-            os.system(r'/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
-            print('dpkg is not installed...')
-            print('installing dpkg...')
-            os.system('brew install dpkg')
-    if os.path.exists(PATCHER_DIR) == False:
+    if not dpkg_exists and not brew_exists:
+        print('brew is not installed...')
+        print('starting brew installer...')
+        os.system(r'/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+        print('dpkg is not installed...')
+        print('installing dpkg...')
+        os.system('brew install dpkg')
+    if not os.path.exists(PATCHER_DIR):
         print('downloading patcher script...')
         p = requests.get('https://raw.githubusercontent.com/jakeajames/rootlessJB3/master/patcher').text
         open(PATCHER_DIR, 'w').write(p)
@@ -65,9 +64,9 @@ try:
     pattern = '*.dylib'
     for dir,_,_ in out_path:
         files.extend(glob(os.path.join(dir, pattern)))
-    for i in range(len(files)):
-        print(f'running ldid2 on {files[i]}')
-        os.system(f'ldid2 -S {files[i]}')
+    for file in files:
+        print('running ldid2 on ', file)
+        os.system('ldid2 -S ' + file)
     os.remove(PATCHER_DIR)
     print('complete...')
 except Exception as e:
